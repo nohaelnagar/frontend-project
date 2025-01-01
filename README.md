@@ -1,2 +1,2 @@
 # frontend-project
-News Feed page
+News Feed App built using React, Material UI & NewsAPI
