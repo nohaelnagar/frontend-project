@@ -10,5 +10,4 @@ following capabilities:
 5. Provide Category dropdown to filter results based on category.
 6. Improve the Error handling experience; Show error messages when loading data fails.
 7. Improve Loading experience; use splash screen while data is loading.
-8. Style using Material UI components (or any other major styling library of your choice like
-Bootstrap)
+8. Style using Material UI components.
