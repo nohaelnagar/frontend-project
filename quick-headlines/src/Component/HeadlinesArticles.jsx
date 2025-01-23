@@ -9,20 +9,21 @@ import { styled } from "@mui/material/styles";
 const StyledCard = styled(Card)(({ theme }) => ({
 margin: theme.spacing(2, 0),
 }));
+
+
 function NewsArticle() {
-return (
-<StyledCard>
-<CardActionArea>
-<CardMedia component="img" height="200" image="https://placeholder.co/150"
-alt="Sample article" />
-<CardContent>
-<Typography gutterBottom variant="h6" component="div">
-Sample Article (Title)
-</Typography>
-<Typography variant="body2" color="textSecondary">
-This is a sample article (Description)
-</Typography>
-</CardContent>
+  return (
+    <StyledCard>
+      <CardActionArea>
+        <CardMedia component="img" height="200" image="https://placeholder.co/150" alt="Sample article" />
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="div">
+            Sample Article (Title)
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            This is a sample article (Description)
+          </Typography>
+          </CardContent>
 </CardActionArea>
 <Box p={2}>
 <Typography variant="caption" color="textSecondary" display="block">
