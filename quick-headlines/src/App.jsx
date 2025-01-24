@@ -1,44 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 import HeadlinesHeader from "./Component/HeadlinesHeader";
 import HeadlinesFeed from "./Component/HeadlinesFeed";
 
 function App() {
-  const sampleArticles = [
-    {
-      title: "Test News 1",
-      description: "This is a test news description 1.",
-      image: "https://placehold.co/150",
-      author: "John Doe",
-      publishedAt: "2023-03-01T12:00:00Z",
-    },
-    {
-      title: "Test News 2",
-      description: "This is a test news description 2.",
-      image: "https://placehold.co/150",
-      author: "Jane Smith",
-      publishedAt: "2023-04-01T12:00:00Z",
-    },
-    {
-      title: "Test News 3",
-      description: "This is a test news description 3.",
-      image: "https://placehold.co/150",
-      author: "John Doe",
-      publishedAt: "2023-05-01T12:00:00Z",
-    },
-    {
-      title: "Test News 4",
-      description: "This is a test news description 4.",
-      image: "https://placehold.co/150",
-      author: "Jane Smith",
-      publishedAt: "2023-06-01T12:00:00Z",
-    },
-  ];
+  const [articles, setArticles] = useState([]);
+  
+  async function loadData() {
+const response = await fetch(
+  `https://newsapi.org/v2/top-headlines?country=us&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`
+);
 
+    const data = await response.json();
+    return data.articles.map(article => {
+      const { title, description, author, publishedAt, urlToImage } = article;
+      return {
+        title,
+        description,
+        author,
+        publishedAt,
+        image: urlToImage,
+      }
+    });
+  }
+  useEffect(() => {
+    loadData().then(setArticles);
+  }, []);
   return (
     <Container>
       <HeadlinesHeader />
-      <HeadlinesFeed articles={sampleArticles} />
+      <HeadlinesFeed articles={articles} />
     </Container>
   );
 }
