@@ -5,10 +5,13 @@ import HeadlinesFeed from "./Component/HeadlinesFeed";
 
 function App() {
   const [articles, setArticles] = useState([]);
-  
-  async function loadData() {
+  const [query, setQuery] = useState("");
+
+  async function loadData(inputQuery) {
 const response = await fetch(
-  `https://newsapi.org/v2/top-headlines?country=us&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`
+  `https://newsapi.org/v2/top-headlines?q=${query}&country=us&apiKey=${
+    import.meta.env.VITE_NEWS_API_KEY
+  }`
 );
 
     const data = await response.json();
@@ -24,11 +27,13 @@ const response = await fetch(
     });
   }
   useEffect(() => {
-    loadData().then(setArticles);
-  }, []);
+    loadData(query).then(setArticles);
+  }, [query]);
+
+
   return (
     <Container>
-      <HeadlinesHeader />
+      <HeadlinesHeader onSearchChange ={setQuery} />
       <HeadlinesFeed articles={articles} />
     </Container>
   );

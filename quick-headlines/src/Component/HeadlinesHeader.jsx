@@ -37,7 +37,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 /**
  * The header to be displayed at the top of the page.
  */
-function HeadlinesHeader() {
+function HeadlinesHeader(props) {
+  const { onSearchChange } = props;
+  
+  const handleInputChange = (event) => {
+    onSearchChange(event.target.value);
+  }
+  
+  
   return (
     <AppBar position="static">
       <Toolbar>
