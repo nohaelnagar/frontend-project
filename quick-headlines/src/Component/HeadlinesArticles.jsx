@@ -11,7 +11,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   margin: theme.spacing(2, 0),
 }));
 
-function HeadlinesArticle() {
+function HeadlinesArticle(props) {
   const { image, title, description, author, publishedAt } = props;
   return (
     <StyledCard>

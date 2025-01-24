@@ -10,7 +10,7 @@ function HeadlinesHeader() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6">HeadlinesFeed App</Typography>
+        <Typography variant="h6">Quick Headlines</Typography>
       </Toolbar>
     </AppBar>
   );
