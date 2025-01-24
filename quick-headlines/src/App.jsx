@@ -26,14 +26,21 @@ const response = await fetch(
       }
     });
   }
+
+
+
   useEffect(() => {
-    loadData(query).then(setArticles);
-  }, [query]);
+    loadData("").then(setArticles);
+  }, []);
 
+  const handleSearchChange = (newQeury) => {
+    laodData(newQeury).then(setArticles);
+  }
 
+console.log("APP REevaluated")
   return (
     <Container>
-      <HeadlinesHeader onSearchChange ={setQuery} />
+      <HeadlinesHeader onSearchChange={handleSearchChange} />
       <HeadlinesFeed articles={articles} />
     </Container>
   );
