@@ -5,6 +5,7 @@ import HeadlinesFeed from "./Component/HeadlinesFeed";
 
 function App() {
   const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
 
   async function loadData(inputQuery) {
@@ -27,21 +28,26 @@ const response = await fetch(
     });
   }
 
-
-
   useEffect(() => {
-    loadData("").then(setArticles);
+    setLoading(true);
+    loadData("").then((newData) => {
+      setArticles(newData);
+      setLoading(false);
+    });
   }, []);
 
   const handleSearchChange = (newQeury) => {
-    laodData(newQeury).then(setArticles);
-  }
+    setLoading(true);
+    loadData(newQeury).then((newData) => {
+      setArticles(newData);
+      setLoading(false);
+    });
+  };
 
-console.log("APP REevaluated")
   return (
     <Container>
       <HeadlinesHeader onSearchChange={handleSearchChange} />
-      <HeadlinesFeed articles={articles} />
+      <HeadlinesFeed articles={articles} loading={loading} />
     </Container>
   );
 }
