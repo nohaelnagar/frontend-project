@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -7,32 +8,43 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme }) => ({
-margin: theme.spacing(2, 0),
+  margin: theme.spacing(2, 0),
 }));
 
-
-function NewsArticle() {
+function HeadlinesArticle() {
+  const { image, title, description, author, publishedAt } = props;
   return (
     <StyledCard>
       <CardActionArea>
-        <CardMedia component="img" height="200" image="https://placeholder.co/150" alt="Sample article" />
+        {image && (
+          <CardMedia
+            component="img"
+            height="200"
+            image={image}
+            alt="Sample article"
+          />
+        )}
         <CardContent>
           <Typography gutterBottom variant="h6" component="div">
-            Sample Article (Title)
+            {title}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            This is a sample article (Description)
+            {description}
           </Typography>
-          </CardContent>
-</CardActionArea>
-<Box p={2}>
-<Typography variant="caption" color="textSecondary" display="block">
-John Doe (Author)
-</Typography>
-<Typography variant="caption" color="textSecondary">
-Tuesday October 3rd, 2023
-</Typography>
-</Box>
-</StyledCard>
-);
+        </CardContent>
+      </CardActionArea>
+      <Box p={2}>
+        <Typography variant="caption" color="textSecondary" display="block">
+          {author}
+        </Typography>
+        {publishedAt && (
+          <Typography variant="caption" color="textSecondary">
+            {new Date(publishedAt).toLocaleDateString()}
+          </Typography>
+        )}
+      </Box>
+    </StyledCard>
+  );
 }
+
+export default HeadlinesArticle;
