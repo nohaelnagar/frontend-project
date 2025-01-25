@@ -1,19 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Container } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Container } from "@mui/material";
 import HeadlinesHeader from "./Component/HeadlinesHeader";
 import HeadlinesFeed from "./Component/HeadlinesFeed";
 import { debounce } from "lodash";
+import { styled } from "@mui/system";
+
+const FooterButtons = styled("div")(({ theme }) => ({
+  margin: theme.spacing(2, 0),
+  display: "flex",
+  justifyContent: "space-between",
+}));
 
 function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const pageNo = useRef(1);
+  const queryValue = useRef("");
 
-  async function loadData(inputQuery) {
-const response = await fetch(
-  `https://newsapi.org/v2/top-headlines?q=${inputQuery}&country=us&apiKey=${
-    import.meta.env.VITE_NEWS_API_KEY
-  }`
-);
+  async function loadData() {
+    const response = await fetch(
+      `https://newsapi.org/v2/top-headlines?q=${queryValue.current}&page=${pageNo.current}&pageSize=5&country=us&apiKey=${
+        import.meta.env.VITE_NEWS_API_KEY
+      }`
+    );
 
     const data = await response.json();
     return data.articles.map(article => {
@@ -28,30 +37,45 @@ const response = await fetch(
     });
   }
 
-  const debouncedData = debounce((newQeury) => {
+  const getFetchHeadlines = () => {
     setLoading(true);
-    loadData(newQeury).then((newData) => {
+    loadData().then((newData) => {
       setArticles(newData);
       setLoading(false);
     });
-  }, 500);
+  };
+
+
+  const debouncedData = debounce(getFetchHeadlines, 500);
 
   useEffect(() => {
-    setLoading(true);
-    loadData("").then((newData) => {
-      setArticles(newData);
-      setLoading(false);
-    });
+    getFetchHeadlines()
   }, []);
 
-  const handleSearchChange = (newQeury) => {
-    debouncedData(newQeury);
+  const searchChange = (newQeury) => {
+    pageNo.current = 1;
+    queryValue.current = newQeury;
+    debouncedData();
+  };
+
+  const nextClick = () => {
+    pageNo.current += 1;
+    getFetchHeadlines();
+  };
+
+  const previousClick = () => {
+    pageNo.current -= 1;
+    getFetchHeadlines();
   };
 
   return (
     <Container>
-      <HeadlinesHeader onSearchChange={handleSearchChange} />
+      <HeadlinesHeader onSearchChange={searchChange} />
       <HeadlinesFeed articles={articles} loading={loading} />
+      <FooterButtons>
+        <Button variant="outlined" onClick={previousClick}>Previous</Button>
+        <Button variant="outlined" onClick={nextClick}>Next</Button>
+      </FooterButtons>
     </Container>
   );
 }
