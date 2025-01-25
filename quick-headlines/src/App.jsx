@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 import HeadlinesHeader from "./Component/HeadlinesHeader";
 import HeadlinesFeed from "./Component/HeadlinesFeed";
+import { debounce } from "lodash";
 
 function App() {
   const [articles, setArticles] = useState([]);
@@ -27,6 +28,14 @@ const response = await fetch(
     });
   }
 
+  const debouncedData = debounce((newQeury) => {
+    setLoading(true);
+    loadData(newQeury).then((newData) => {
+      setArticles(newData);
+      setLoading(false);
+    });
+  }, 500);
+
   useEffect(() => {
     setLoading(true);
     loadData("").then((newData) => {
@@ -36,11 +45,7 @@ const response = await fetch(
   }, []);
 
   const handleSearchChange = (newQeury) => {
-    setLoading(true);
-    loadData(newQeury).then((newData) => {
-      setArticles(newData);
-      setLoading(false);
-    });
+    debouncedData(newQeury);
   };
 
   return (
