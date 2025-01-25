@@ -6,11 +6,10 @@ import HeadlinesFeed from "./Component/HeadlinesFeed";
 function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
 
   async function loadData(inputQuery) {
 const response = await fetch(
-  `https://newsapi.org/v2/top-headlines?q=${query}&country=us&apiKey=${
+  `https://newsapi.org/v2/top-headlines?q=${inputQuery}&country=us&apiKey=${
     import.meta.env.VITE_NEWS_API_KEY
   }`
 );

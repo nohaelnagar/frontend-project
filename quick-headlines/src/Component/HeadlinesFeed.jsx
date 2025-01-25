@@ -1,6 +1,6 @@
 import React from "react";
 import HeadlinesArticle from "./HeadlinesArticles";
-import { Typography } from "@mui/material";
+import { Typography, Box, CircularProgress } from "@mui/material";
 
 function HeadlinesFeed(props) {
   const { articles, loading } = props;
@@ -18,15 +18,17 @@ function HeadlinesFeed(props) {
     );
   }
   
-  if (!article.length) {
-    <Typography
-      align="center"
-      variant="h6"
-      color="textSecondary"
-      margin={4}
-    >
-      NO ARTICLES TO PREVIEW...
-    </Typography>
+  if (!articles.length) {
+    return (
+      <Typography
+        align="center"
+        variant="h6"
+        color="textSecondary"
+        margin={4}
+      >
+        NO ARTICLES TO PREVIEW...
+      </Typography>
+    );  
   }
   
   return (
