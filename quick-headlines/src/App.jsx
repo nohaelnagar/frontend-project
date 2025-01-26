@@ -21,14 +21,22 @@ function App() {
   const pageNo = useRef(1);
   const queryValue = useRef("");
 
-  async function loadData(categoryNow) {
+  async function loadData(currentCategory) {
     const response = await fetch(
-      `https://newsapi.org/v2/top-headlines?category=${categoryNow}&q=${
+      `https://newsapi.org/v2/top-headlines?category=${currentCategory}&q=${
         queryValue.current
       }&page=${pageNo.current}&pageSize=${PAGE_SIZE}&country=us&apiKey=${
         import.meta.env.VITE_NEWS_API_KEY
       }`
     );
+
+        if (!response.ok) {
+          if (response.status === 429) {
+            throw new Error("Too many requests. Please try again later.");
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
 
     const data = await response.json();
     if (data.status === "error") {
@@ -47,16 +55,19 @@ function App() {
     });
   } 
 
-  const getFetchHeadlines = (categoryNow) => {
+  const getFetchHeadlines = (currentCategory) => {
     setLoading(true);
     setError("");
-    loadData(categoryNow ?? category).then((newData) => {
-      setArticles(newData);
-    }).catch(errorMessage => {
-      setError(errorMessage.message);
-    }).finally(() => {
-      setLoading(false);
-    });
+    loadData(currentCategory ?? category)
+      .then((newData) => {
+        setArticles(newData);
+      })
+      .catch((errorMessage) => {
+        setError(errorMessage.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
 
@@ -97,7 +108,6 @@ function App() {
         category={category}
         onCategoryChange={categoryChanges}
       />
-
       {error.length === 0 ? (
         <HeadlinesFeed articles={articles} loading={loading} />
       ) : (
