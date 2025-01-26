@@ -17,24 +17,28 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [category, setCategory] = useState("general");
   const pageNo = useRef(1);
   const queryValue = useRef("");
 
-  async function loadData() {
+  async function loadData(categoryNow) {
     const response = await fetch(
-      `https://newsapi.org/v2/top-headlines?q=${queryValue.current}&page=${pageNo.current
-      }&pageSize=${PAGE_SIZE}&country=us&apiKey=${import.meta.env.VITE_NEWS_API_KEY
+      `https://newsapi.org/v2/top-headlines?category=${categoryNow}&q=${
+        queryValue.current
+      }&page=${pageNo.current}&pageSize=${PAGE_SIZE}&country=us&apiKey=${
+        import.meta.env.VITE_NEWS_API_KEY
       }`
     );
 
     const data = await response.json();
     if (data.status === "error") {
-      throw new Error("An Error has Occured");
+      throw new Error("Something went wrong!!!");
     }
-    return data.articles.map(article => {
+    return data.articles.map((article) => {
       const { title, description, author, publishedAt, urlToImage } = article;
       return {
         title,
+        url,
         description,
         author,
         publishedAt,
@@ -43,12 +47,10 @@ function App() {
     });
   } 
 
-
-
-  const getFetchHeadlines = () => {
+  const getFetchHeadlines = (categoryNow) => {
     setLoading(true);
     setError("");
-    loadData().then((newData) => {
+    loadData(categoryNow ?? category).then((newData) => {
       setArticles(newData);
     }).catch(errorMessage => {
       setError(errorMessage.message);
@@ -80,9 +82,22 @@ function App() {
       getFetchHeadlines();
   };
 
+  const categoryChanges = (event) => {
+    setCategory(event.target.value);
+    pageNo.current = 1;
+    getFetchHeadlines(event.target.value);
+  }
+
+
   return (
     <Container>
-      <HeadlinesHeader onSearchChange={searchChange} />
+
+      <HeadlinesHeader
+        onSearchChange={searchChange}
+        category={category}
+        onCategoryChange={categoryChanges}
+      />
+
       {error.length === 0 ? (
         <HeadlinesFeed articles={articles} loading={loading} />
       ) : (
@@ -90,6 +105,7 @@ function App() {
           {error}
         </Typography>
       )}
+
       <FooterButtons>
         <Button
           variant="outlined"
@@ -106,6 +122,7 @@ function App() {
           Next
         </Button>
       </FooterButtons>
+
     </Container>
   );
 }
