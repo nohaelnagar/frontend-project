@@ -1,7 +1,7 @@
 # frontend-project
 News Feed App built using React, Material UI & NewsAPI
  
-In this project, I will use React skills to create a news feed app. The app will have the
+In this project, I will use React skills to create a Quick Headlines APP. The app will have the
 following capabilities:
 1. Use News API to get news articles
 2. Render list of articles based on news API results
