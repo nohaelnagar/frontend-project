@@ -34,7 +34,7 @@ function App() {
           if (response.status === 429) {
             throw new Error("Too many requests. Please try again later.");
           } else {
-            throw new Error("Network response was not ok");
+            throw new Error("Something went wrong!!!");
           }
         }
 
@@ -43,7 +43,7 @@ function App() {
       throw new Error("Something went wrong!!!");
     }
     return data.articles.map((article) => {
-      const { title, description, author, publishedAt, urlToImage } = article;
+      const { title, description, author, publishedAt, urlToImage, url } = article;
       return {
         title,
         url,
